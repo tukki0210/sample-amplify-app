@@ -1,0 +1,4 @@
+vite.config.ts
+aws-exports.js
+aws-exports.ts
+src/models
