@@ -16,6 +16,7 @@ import aws_exports from "./aws-exports";
 import PersonComponentCollection from "./ui-components/PersonComponentCollection";
 import { Board, Person } from "./models";
 import BoardComponent from "./ui-components/BoardComponent";
+import SelectComponent from "./crud/select";
 
 Amplify.configure(aws_exports);
 
@@ -25,67 +26,6 @@ const content3 = <p>タブ３のコンテンツ</p>;
 const content4 = <p>タブ４のコンテンツ</p>;
 
 const App: FC = () => {
-  const [content1, setContent1] = useState<JSX.Element>();
-  const [input, setInput] = useState<string>("");
-  const [find, setFind] = useState<string>(input);
-
-  const doChange = (event: any): void => {
-    setInput(event.target.value);
-  };
-
-  const doFilter = (): void => {
-    setFind(input);
-  };
-
-  const getPerson = async (val: Board): Promise<Person> => {
-    const data = await DataStore.query(Person, (ob) =>
-      ob.id("eq", val.personID)
-    );
-    return data[0];
-  };
-
-  useEffect(() => {
-    const getBoard = async (): Promise<void> => {
-      const values = await DataStore.query(Board, Predicates.ALL, {
-        sort: (ob) => ob.createdAt(SortDirection.DESCENDING),
-        page: +input,
-        limit: 3,
-      });
-
-      // map関数内で非同期処理（非同期イテレーター）
-      const list = await Promise.all(
-        values.map(async (value) => {
-          const person = await getPerson(value);
-
-          return (
-            <div key={value.id}>
-              <BoardComponent board={value} />
-              <p className="text-end">posted by {person?.email}</p>
-            </div>
-          );
-        })
-      );
-
-      setContent1(
-        <ol className="my-3 list-group">
-          <div className="my-2">
-            <input
-              type="text"
-              className="form-control col"
-              onChange={doChange}
-            />
-            <button className="btn btn-primary col-2 my-2" onClick={doFilter}>
-              Click
-            </button>
-          </div>
-          {list}
-        </ol>
-      );
-    };
-
-    void getBoard();
-  }, [input, find]);
-
   return (
     <div className="py-4">
       <Header className="mb-4" />
@@ -114,7 +54,7 @@ const App: FC = () => {
       </ul>
       <div className="tab-content">
         <div id="tab1" className="my-2 tab-pane active">
-          {content1}
+          <SelectComponent />
         </div>
         <div id="tab2" className="my-2 tab-pane ">
           {content2}
