@@ -1,14 +1,14 @@
 import { DataStore, Predicates, SortDirection } from "aws-amplify";
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { Board, Person } from "../models";
 import BoardComponent from "../ui-components/BoardComponent";
 
-const SelectComponent: FC = () => {
-  const [content, setContent] = useState<JSX.Elemen[]>();
+const SelectContent: FC = () => {
+  const [content, setContent] = useState<JSX.Element[]>();
   const [input, setInput] = useState<string>("");
   const [find, setFind] = useState<string>(input);
 
-  const doChange = (event: any): void => {
+  const doChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setInput(event.target.value);
   };
 
@@ -16,21 +16,21 @@ const SelectComponent: FC = () => {
     setFind(input);
   };
 
-  const getPersonByBoard = async (board: Board): Promise<Person> => {
+  const getPersonByBoard = useCallback(async (board: Board): Promise<Person> => {
     const person = await DataStore.query(Person, (ob) =>
       ob.id("eq", board.personID)
     );
     return person[0];
-  };
+  },[]);
 
-  const getBoard = async (): Promise<Board[]> => {
+  const getBoard = useCallback(async (): Promise<Board[]> => {
     const boards = await DataStore.query(Board, Predicates.ALL, {
       sort: (ob) => ob.createdAt(SortDirection.DESCENDING),
       page: +input,
       limit: 3,
     });
     return boards;
-  };
+  },[input]);
 
   useEffect(() => {
     const data = async (): Promise<void> => {
@@ -51,7 +51,7 @@ const SelectComponent: FC = () => {
       setContent(list);
     };
     void data();
-  }, [input, find]);
+  }, [input, find, getBoard, getPersonByBoard]);
 
   return (
     <ol className="my-3 list-group">
@@ -65,4 +65,4 @@ const SelectComponent: FC = () => {
     </ol>
   );
 };
-export default SelectComponent;
+export default SelectContent;

@@ -1,22 +1,15 @@
 import "./App.css";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import "@aws-amplify/ui-react/styles.css";
-import {
-  Amplify,
-  Auth,
-  DataStore,
-  Predicates,
-  SortDirection,
-} from "aws-amplify";
+import { Amplify, Auth } from "aws-amplify";
 // import { Authenticator } from "@aws-amplify/ui-react";
 import { Header } from "./ui-components";
 
 import aws_exports from "./aws-exports";
 // import BoardComponentCollection from "./ui-components/BoardComponentCollection";
 import PersonComponentCollection from "./ui-components/PersonComponentCollection";
-import { Board, Person } from "./models";
-import BoardComponent from "./ui-components/BoardComponent";
-import SelectComponent from "./crud/select";
+import SelectComponent from "./crud/SelectContent";
+import CreateContent from "./crud/CreateContent";
 
 Amplify.configure(aws_exports);
 
@@ -33,7 +26,7 @@ const App: FC = () => {
       <ul className="nav nav-tabs">
         <li className="nav-item">
           <a href="#tab1" className="nav-link active" data-bs-toggle="tab">
-            List
+            Select
           </a>
         </li>
         <li className="nav-item">
@@ -57,7 +50,7 @@ const App: FC = () => {
           <SelectComponent />
         </div>
         <div id="tab2" className="my-2 tab-pane ">
-          {content2}
+          <CreateContent />
         </div>
         <div id="tab3" className="my-2 tab-pane">
           {content3}
