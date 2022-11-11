@@ -7,14 +7,15 @@ import { Header } from "./ui-components";
 
 import aws_exports from "./aws-exports";
 // import BoardComponentCollection from "./ui-components/BoardComponentCollection";
-import PersonComponentCollection from "./ui-components/PersonComponentCollection";
+// import PersonComponentCollection from "./ui-components/PersonComponentCollection";
 import SelectComponent from "./crud/SelectContent";
 import CreateContent from "./crud/CreateContent";
+import SelectByGraphQLAPI from "./api/SelectByGraphQLAPI";
 
 Amplify.configure(aws_exports);
 
 // const content1 = <BoardComponentCollection />;
-const content2 = <PersonComponentCollection />;
+// const content2 = <PersonComponentCollection />;
 const content3 = <p>タブ３のコンテンツ</p>;
 const content4 = <p>タブ４のコンテンツ</p>;
 
@@ -53,7 +54,7 @@ const App: FC = () => {
           <CreateContent />
         </div>
         <div id="tab3" className="my-2 tab-pane">
-          {content3}
+          <SelectByGraphQLAPI />
         </div>
         <div id="tab4" className="my-2 tab-pane">
           {content4}
